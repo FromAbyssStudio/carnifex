@@ -1,11 +1,61 @@
-Windows/VisualStudio/.vs/
-Windows/VisualStudio/Build-*/
-Windows/VisualStudio/ironwail.vcxproj.user
-Quake/*.o
-Quake/*.d
-Quake/*.res
-Quake/*.exe
-Quake/ironwail
+# Build artifacts
+build-artifacts/
 build/
-/.vs
-/out/
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles/
+Makefile
+*.cmake
+
+# Compiled binaries
+carnifex-engine
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Object files and dependencies
+*.o
+*.d
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+temp/
+
+# Game assets (binary files)
+*.wad
+*.WAD
+*.pak
+*.PAK
+*.bsp
+*.BSP
+*.dat
+*.DAT
+*.lmp
+*.LMP
+
+# Audio files (binary)
+*.wav
+*.WAV
+*.mp3
+*.MP3
+*.ogg
+*.OGG
+*.flac
+*.FLAC
+*.opus
+*.OPUS
+

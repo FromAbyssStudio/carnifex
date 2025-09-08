@@ -1,35 +1,278 @@
-# What's this?
-A fork of the popular GLQuake descendant [QuakeSpasm](https://sourceforge.net/projects/quakespasm/) with a focus on high performance instead of maximum compatibility, with a few extra features sprinkled on top.
+# Carnifex Engine
 
-## Does performance still matter, though? I'm getting 1000 fps in QS on e1m1
-On most maps performance is indeed not much of a concern on a modern system. In recent years, however, some mappers have tried more ambitious/unconventional designs with poly counts far exceeding those of the original id Software levels from 25 years ago. It's also not uncommon for players of such an old game to be using hardware that is maybe not the latest and greatest, struggling on complex maps when using traditional renderers. By moving work from the CPU to the GPU (culling, lightmap updates) and taking advantage of more modern OpenGL features (instancing, compute shaders, persistent buffer mapping, indirect multi-draw, bindless textures), this fork is capable of handling even the [most](https://www.quaddicted.com/reviews/ter_shibboleth_drake_redux.html) [demanding](https://www.quaddicted.com/forum/viewtopic.php?id=1171) [maps](https://www.quaddicted.com/reviews/ravenkeep.html) at very high framerates. To avoid physics issues the renderer is also decoupled from the server (using code from [QSS](https://github.com/Shpoike/Quakespasm/), via [vkQuake](https://github.com/Novum/vkQuake)).
+A modern, independent game engine based on IronWail, designed for creating original games without dependency on original Quake files.
 
-## Bonus features
-- ability to play the [2021 release content](https://store.steampowered.com/app/2310/QUAKE/) with zero setup: if you have [Quake](https://store.steampowered.com/app/2310/QUAKE/) on [Steam](https://store.steampowered.com/app/2310/QUAKE/), you can unzip the [latest Ironwail release](https://github.com/andrei-drexler/ironwail/releases/latest) in any folder (that doesn't already contain a valid Quake installation) and simply run the executable to play the game, including any add-ons you have already downloaded
-- new *Mods* menu, for quick access to any add-ons you've already installed
-- ability to change weapon key bindings using the UI, not just the console
-- ability to use the mouse to control the UI
-- alternative HUD styles based on the Q64 layout (classic one is still available, of course)
-- real-time palettization (with optional dithering) for a more authentic look
-- classic underwater warp effect
-- more options exposed in the UI, most of them taking effect instantly (no vid_restart needed)
-- support for lightmapped liquid surfaces
-- lightstyle interpolation (e.g. smoothly pulsating lighting in [ad_tears](https://www.moddb.com/mods/arcane-dimensions))
-- reduced heap usage (e.g. you can play [tershib/shib1_drake](https://www.quaddicted.com/reviews/ter_shibboleth_drake_redux.html) and [peril/tavistock](https://www.quaddicted.com/forum/viewtopic.php?id=1171) without using -heapsize on the command line)
-- reduced loading time for jumbo maps
-- slightly higher color/depth buffer precision to avoid banding/z-fighting artifacts
-- a more precise ~hack~work-around for the z-fighting issues present in the original levels
-- capped framerate when no map is loaded
-- ability to run the game from a folder containing Unicode characters
+## [OVERVIEW]
 
-## System requirements
+Carnifex Engine is a complete game development platform that provides:
+- **Independent Game Development**: No dependency on original Quake files
+- **Modern Features**: Enhanced graphics, audio, and user interface
+- **Cross-Platform Support**: Linux, Windows, and other platforms
+- **Extensible Architecture**: Easy to modify and extend for custom games
 
-| | Minimum GPU | Recommended GPU |
-|:--|:--|:--|
-|NVIDIA|GeForce GT 420 ("Fermi" 2010)|GeForce GT 630 or newer ("Kepler" 2012)|
-|AMD|Radeon HD 5450 ("TeraScale 2" 2009) |Radeon HD 7700 series or newer ("GCN" 2012)|
-|Intel|HD Graphics 4200 ("Haswell" 2012)|HD Graphics 620 ("Kaby Lake" 2016) or newer|
+## [QUICK START]
 
-Notes:
-1) These requirements might not be 100% accurate since they are based solely on reported OpenGL capabilities. There could still be unforeseen compatibility issues.
-2) Mac OS is not supported at this time due to the use of OpenGL 4.3 (for compute shaders), since Apple has deprecated OpenGL after version 4.1.
+### Building the Engine
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd carnifex
+
+# Build the engine
+make
+
+# Run the engine
+./build-artifacts/carnifex-engine -game carnifex-game
+```
+
+### Running the Engine
+
+```bash
+# Basic usage
+./build-artifacts/carnifex-engine -game carnifex-game
+
+# With development mode
+./build-artifacts/carnifex-engine -game carnifex-game -dev
+
+# Windowed mode
+./build-artifacts/carnifex-engine -game carnifex-game -window
+```
+
+## [MUSIC SYSTEM]
+
+### Enhanced Music Metadata System
+
+The Carnifex Engine features a sophisticated music metadata system that automatically displays information about playing music.
+
+#### Features
+
+- **Automatic Metadata Extraction**: Supports OGG Vorbis comments and MP3 ID3v1 tags
+- **Console Logging**: Displays `MUSIC: [Title] by [Artist]` in the console
+- **Colored Toaster Notifications**: Beautiful on-screen display with:
+  - **Title**: Dark white color
+  - **Artist**: Light red color
+  - **Duration**: 5 seconds (configurable)
+- **Fallback Support**: Shows filename when no metadata is available
+- **Menu Configuration**: Toggle console output and toaster display
+
+#### Usage
+
+1. **Console Commands**:
+   ```
+   music track02    # Play track02 with metadata display
+   music track03    # Play track03 with metadata display
+   ```
+
+2. **Menu Options**:
+   - Options → Game → Music Info Log (toggle console output)
+   - Options → Game → Music Info Toaster (toggle on-screen display)
+
+3. **Configuration Variables**:
+   - `music_info_log` (default: 1) - Enable console logging
+   - `music_info_toaster` (default: 1) - Enable toaster notifications
+   - `music_info_toaster_duration` (default: 5) - Toaster display duration in seconds
+
+#### Supported Audio Formats
+
+- **OGG Vorbis** (.ogg) - Full metadata support
+- **MP3** (.mp3) - ID3v1 tag support
+- **WAV** (.wav) - Basic support
+- **Module formats** (.it, .s3m, .xm, .mod, .umx) - Basic support
+
+## [GRAPHICS FEATURES]
+
+- **OpenGL Rendering**: Modern OpenGL-based graphics
+- **High Resolution Support**: Up to 4K and beyond
+- **Enhanced Textures**: Improved texture filtering and quality
+- **Modern Shaders**: Advanced lighting and effects
+- **Cross-Platform Compatibility**: Works on various graphics hardware
+
+## [INPUT SYSTEM]
+
+- **Gamepad Support**: Full controller support including Steam Deck
+- **Gyro Controls**: Motion sensor support for compatible devices
+- **Keyboard & Mouse**: Traditional PC input methods
+- **Customizable Controls**: Configurable key bindings
+
+## [DEVELOPMENT]
+
+### Project Structure
+
+```
+carnifex/
+├── core/                    # Engine core source code
+│   ├── music_metadata.c     # Music metadata system
+│   ├── music_metadata.h     # Music metadata headers
+│   ├── bgmusic.c           # Background music system
+│   ├── gl_screen.c         # Graphics rendering
+│   ├── menu.c              # User interface
+│   └── ...
+├── carnifex-game/          # Game content
+│   ├── music/              # Music files
+│   ├── gfx/                # Graphics assets
+│   └── ...
+├── docs/                   # Documentation
+├── tools/                  # Development tools
+└── platforms/              # Platform-specific code
+```
+
+### Building from Source
+
+#### Prerequisites
+
+- **C Compiler**: GCC or Clang
+- **CMake**: Version 3.10 or higher
+- **OpenGL**: OpenGL 3.3 or higher
+- **SDL2**: SDL2 development libraries
+- **Audio Libraries**: Vorbis, XMP (optional: MP3, FLAC, Opus)
+
+#### Linux Dependencies
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install build-essential cmake libsdl2-dev libvorbis-dev libxmp-dev
+
+# Arch Linux
+sudo pacman -S base-devel cmake sdl2 libvorbis libxmp
+
+# Fedora
+sudo dnf install gcc cmake SDL2-devel libvorbis-devel libxmp-devel
+```
+
+#### Build Process
+
+```bash
+# Clean build
+make clean
+make
+
+# Debug build
+make DEBUG=1
+
+# Release build
+make RELEASE=1
+```
+
+### Adding Music with Metadata
+
+To add music files with proper metadata:
+
+1. **OGG Files**: Use `vorbiscomment` to add metadata:
+   ```bash
+   vorbiscomment -t "TITLE=Your Song Title" -t "ARTIST=Your Artist Name" -t "ALBUM=Your Album" -t "DATE=2025" your_file.ogg
+   ```
+
+2. **MP3 Files**: Use any MP3 tag editor to add ID3v1 tags
+
+3. **Place Files**: Put music files in `carnifex-game/music/` directory
+
+## [GAME DEVELOPMENT]
+
+### Creating Custom Games
+
+1. **Game Directory**: Create a new directory (e.g., `my-game/`)
+2. **Content Structure**: Organize assets in subdirectories:
+   ```
+   my-game/
+   ├── music/          # Music files
+   ├── gfx/            # Graphics
+   ├── maps/           # Level files
+   └── ...
+   ```
+3. **Run Game**: `./build-artifacts/carnifex-engine -game my-game`
+
+### Music Integration
+
+The engine automatically:
+- Scans for music files in the game's `music/` directory
+- Extracts metadata from supported formats
+- Displays information when music plays
+- Supports both automatic and manual music playback
+
+## [CONFIGURATION]
+
+### Engine Configuration
+
+- **Video Settings**: Resolution, fullscreen, vsync
+- **Audio Settings**: Volume, audio device selection
+- **Input Settings**: Key bindings, gamepad configuration
+- **Game Settings**: Music info display, toaster notifications
+
+### Configuration Files
+
+- `carnifex.cfg` - Main configuration file
+- `default.cfg` - Default settings
+- `autoexec.cfg` - Auto-executed commands
+
+## [TROUBLESHOOTING]
+
+### Common Issues
+
+1. **Build Errors**:
+   - Ensure all dependencies are installed
+   - Check CMake version (3.10+ required)
+   - Verify OpenGL drivers are up to date
+
+2. **Audio Issues**:
+   - Check audio device configuration
+   - Verify music files are in correct format
+   - Ensure audio libraries are properly installed
+
+3. **Graphics Issues**:
+   - Update graphics drivers
+   - Check OpenGL version compatibility
+   - Verify display resolution settings
+
+### Debug Mode
+
+Run with `-dev` flag for additional debugging information:
+```bash
+./build-artifacts/carnifex-engine -game carnifex-game -dev
+```
+
+## [DOCUMENTATION]
+
+- [Engine Guide](docs/user/CARNIFEX_ENGINE_GUIDE.md)
+- [Engine Summary](docs/user/CARNIFEX_ENGINE_SUMMARY.md)
+- [Game Template](docs/user/CARNIFEX_GAME_TEMPLATE.md)
+- [Audio Formats](docs/development/AUDIO_FORMATS.md)
+- [Tools Documentation](docs/development/TOOLS_README.md)
+
+## [CONTRIBUTING]
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+### Code Style
+
+- Follow existing code formatting
+- Add comments for complex functionality
+- Update documentation for new features
+- Test on multiple platforms when possible
+
+## [LICENSE]
+
+This project is licensed under the GNU General Public License v2.0. See the LICENSE file for details.
+
+## [CREDITS]
+
+- **Based on IronWail**: Credits to original IronWail developers
+- **Quake Engine**: Built upon the original Quake engine
+- **Open Source Libraries**: Various open source audio and graphics libraries
+- **Community**: Thanks to the Quake and game development community
+
+## [MUSIC CREDITS]
+
+- **Composer**: Edward 'Toy' Facundo
+- **Album**: Carnifex (2025)
+- **Tracks**: 
+  - "Gallows Pole Awaits"
+  - "Chant Of The Damned"
+
+---
+
+**Carnifex Engine** - Independent game development made simple.
